@@ -61,6 +61,8 @@ library
     exposed-modules:  Example1
                       Example2
                       Example3
+                      Example4
+                      Example5
 
 
     -- LANGUAGE extensions used by modules in this package.

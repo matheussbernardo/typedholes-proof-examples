@@ -36,4 +36,4 @@ module Example3 where
         === (reverse xs ++ [x]) ++ ys
         === (reverse xs ++ [x] ++ ys) ? _ -- I need a lemma here! Can the hole help me?
         === reverse xs ++ ([x] ++ ys)
-        -- It continues here following the paper
+        -- It continues here following the
