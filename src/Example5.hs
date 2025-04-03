@@ -1,10 +1,18 @@
 {-@ LIQUID "--exact-data-cons" @-}
 -- Based on paper: Theorem Proving for All: Equational Reasoning in Liquid Haskell (Functional Pearl)
-{-@ infix    :   @-}
 
 module Example5 where
     import Prelude hiding ((<>), reverse, length, (++))
     import Language.Haskell.Liquid.ProofCombinators ((===), (***), (?), QED(QED), Proof)
+
+    data Tree = Leaf Int | Node Tree Tree
+
+    {-@ reflect flatten @-}
+    flatten :: Tree -> [Int]
+    flatten (Leaf x) = [x]
+    flatten (Node l r) = flatten l ++ flatten r
+
+
     {-@ length :: [a] -> {v:Int | 0 <= v } @-}
     length :: [a] -> Int
     length [] = 0
@@ -17,33 +25,9 @@ module Example5 where
     (x:xs) ++ ys = x : (xs ++ ys)
     {-@ infixl ++ @-}
     {-@ reflect ++ @-}
+    
 
+    {-@ flattenApp :: t:Tree -> ns:[Int] -> { v:[Int] | v == flatten t ++ ns } @-}
+    flattenApp :: Tree -> [Int] -> [Int]
+    flattenApp t ns = _ -- Structural Induction
 
-    data Expr = Val Int |  Add Expr Expr
-
-    {-@ reflect eval @-}
-    eval :: Expr -> Int
-    eval (Val n) = n
-    eval (Add e1 e2) = eval e1 + eval e2
-
-    type Stack = [Int]
-    type Code  = [Op]
-    data Op  = PUSH Int | ADD
-
-    {-@ reflect exec @-}
-    exec :: Code -> Stack -> Maybe Stack
-    exec []           s = Just s
-    exec (PUSH n : c) s = exec c (n:s)
-    exec (ADD : c)    (m:n:s) = exec c (m+n:s)
-    exec _ _            = Nothing
-
-    {-@ reflect comp @-}
-    comp :: Expr -> Code
-    comp (Val n) = [PUSH n]
-    comp (Add x y) = comp x ++ comp y ++ [ADD]
-
-    {-@ generalizedCorrectness 
-         :: e:Expr -> s:Stack -> {exec (comp e) s == Just ((eval  e):s) } 
-    @-}
-    generalizedCorrectness :: Expr -> Stack -> Proof
-    generalizedCorrectness e s = _ -- Structural Induction

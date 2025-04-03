@@ -63,6 +63,7 @@ library
                       Example3
                       Example4
                       Example5
+                      Example6
 
 
     -- LANGUAGE extensions used by modules in this package.

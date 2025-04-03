@@ -1,33 +1,16 @@
-{-@ LIQUID "--exact-data-cons" @-}
--- Based on https://ucsd-progsys.github.io/liquidhaskell-blog/2016/10/06/structural-induction.lhs/
+{-@ LIQUID "--warn-on-term-holes" @-}
 
 module Example1 where
-    import Prelude hiding ((<>))
-    import Language.Haskell.Liquid.ProofCombinators ((===), (***), QED(QED), Proof)
-    
+    import Language.Haskell.Liquid.ProofCombinators (Proof)
+    hole = undefined
 
-    {-@ reflect empty @-}
-    empty  :: [a]
-    empty  = []
+    {-@ listLength :: xs:[a] -> {v : Nat | v == len xs} @-}
+    listLength :: [a] -> Int
+    listLength [] = 0
+    listLength (_:xs) = 1 + listLength xs
 
-    {-@ infix <> @-}
-    {-@ reflect <> @-}
-    (<>) :: [a] -> [a] -> [a]
-    [] <> xs = xs
-    (x:xs) <> ys = x : (xs <> ys)
+    {-@ measure listLength @-}
 
-    {-@ leftId  :: x:[a] -> { (empty <> x) == x } @-}
-    leftId :: [a] -> Proof
-    leftId x
-        =   empty <> x
-        === _
-        === x
-        *** QED
-
-    {-@ rightId  :: x:[a] -> { (x <> empty) == x } @-}
-    rightId :: [a] -> Proof
-    rightId x = _
-
-    {-@ assoc  :: x:[a] -> y:[a] -> z:[a] -> { (x <> (y <> z)) == ((x <> y) <> z) } @-}
-    assoc :: [a] -> [a] -> [a] -> Proof
-    assoc x y z = _
+    {-@ listLengthProof :: xs:[a] -> {listLength xs == len xs} @-}
+    listLengthProof :: [a] -> Proof
+    listLengthProof = hole

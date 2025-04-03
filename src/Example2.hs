@@ -1,36 +1,34 @@
 {-@ LIQUID "--exact-data-cons" @-}
--- Based on paper: Theorem Proving for All: Equational Reasoning in Liquid Haskell (Functional Pearl)
+-- Based on https://ucsd-progsys.github.io/liquidhaskell-blog/2016/10/06/structural-induction.lhs/
 
 module Example2 where
-    import Prelude hiding ((<>), reverse, length, (++))
+    import Prelude hiding ((<>))
     import Language.Haskell.Liquid.ProofCombinators ((===), (***), QED(QED), Proof)
+    
+    hole = undefined
 
-    {-@ length :: [a] -> {v:Int | 0 <= v } @-}
-    length :: [a] -> Int
-    length [] = 0
-    length (_:xs) = 1 + length xs
-    {-@ measure length @-}
+    {-@ reflect empty @-}
+    empty  :: [a]
+    empty  = []
 
-    {-@ reverse :: is:[a] -> {os:[a] | length is == length os} @-}
-    reverse :: [a] -> [a]
-    reverse [] = []
-    reverse (x:xs) = reverse xs ++ [x]
+    {-@ infix <> @-}
+    {-@ reflect <> @-}
+    (<>) :: [a] -> [a] -> [a]
+    [] <> xs = xs
+    (x:xs) <> ys = x : (xs <> ys)
 
-    {-@ (++) :: xs:[a] -> ys:[a] -> {zs:[a] | length zs == length xs + length ys} @-}
-    (++) :: [a] -> [a] -> [a]
-    [] ++ ys = ys
-    (x:xs) ++ ys = x : (xs ++ ys)
-    {-@ infixl ++ @-}
+    {-@ leftId  :: x:[a] -> { (empty <> x) == x } @-}
+    leftId :: [a] -> Proof
+    leftId x
+        =   empty <> x
+        === hole
+        === x          
+        *** QED
 
-    {-@ reflect reverse @-}
-    {-@ reflect ++ @-}
+    {-@ rightId  :: x:[a] -> { (x <> empty) == x } @-}
+    rightId :: [a] -> Proof
+    rightId x = hole
 
-
-    --- Structural Induction will be needed. It could suggest as the next step.
-    {-@ involutionProof :: xs:[a] -> { reverse (reverse xs) == xs } @-}
-    involutionProof :: [a] -> Proof
-    involutionProof xs = _
-
-    {-@ distributivityP :: xs:[a] -> ys:[a] -> { reverse (xs ++ ys) == reverse ys ++ reverse xs } @-}
-    distributivityP :: [a] -> [a] -> Proof
-    distributivityP xs ys = _
+    {-@ assoc  :: x:[a] -> y:[a] -> z:[a] -> { (x <> (y <> z)) == ((x <> y) <> z) } @-}
+    assoc :: [a] -> [a] -> [a] -> Proof
+    assoc x y z = hole

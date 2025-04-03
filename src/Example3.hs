@@ -3,7 +3,7 @@
 
 module Example3 where
     import Prelude hiding ((<>), reverse, length, (++))
-    import Language.Haskell.Liquid.ProofCombinators ((===), (***), (?), QED(QED), Proof)
+    import Language.Haskell.Liquid.ProofCombinators ((===), (***), QED(QED), Proof)
 
     {-@ length :: [a] -> {v:Int | 0 <= v } @-}
     length :: [a] -> Int
@@ -25,15 +25,12 @@ module Example3 where
     {-@ reflect reverse @-}
     {-@ reflect ++ @-}
 
-    {-@ reverseApp :: xs:[a] -> ys:[a] -> {zs:[a] | zs == reverse xs ++ ys} @-}
-    reverseApp :: [a] -> [a] -> [a]
-    reverseApp [] ys     
-        = reverse [] ++ ys
-        === [] ++ ys 
-        === ys
-    reverseApp (x:xs) ys 
-        = reverse (x:xs) ++ ys
-        === (reverse xs ++ [x]) ++ ys
-        === (reverse xs ++ [x] ++ ys) ? _ -- I need a lemma here! Can the hole help me?
-        === reverse xs ++ ([x] ++ ys)
-        -- It continues here following the
+
+    --- Structural Induction will be needed. It could suggest as the next step.
+    {-@ involutionProof :: xs:[a] -> { reverse (reverse xs) == xs } @-}
+    involutionProof :: [a] -> Proof
+    involutionProof xs = _
+
+    {-@ distributivityP :: xs:[a] -> ys:[a] -> { reverse (xs ++ ys) == reverse ys ++ reverse xs } @-}
+    distributivityP :: [a] -> [a] -> Proof
+    distributivityP xs ys = _
