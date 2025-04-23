@@ -5,6 +5,8 @@ module Example3 where
     import Prelude hiding ((<>), reverse, length, (++))
     import Language.Haskell.Liquid.ProofCombinators ((===), (***), QED(QED), Proof)
 
+    hole = undefined
+    
     {-@ length :: [a] -> {v:Int | 0 <= v } @-}
     length :: [a] -> Int
     length [] = 0
@@ -29,8 +31,8 @@ module Example3 where
     --- Structural Induction will be needed. It could suggest as the next step.
     {-@ involutionProof :: xs:[a] -> { reverse (reverse xs) == xs } @-}
     involutionProof :: [a] -> Proof
-    involutionProof xs = _
+    involutionProof xs = hole
 
     {-@ distributivityP :: xs:[a] -> ys:[a] -> { reverse (xs ++ ys) == reverse ys ++ reverse xs } @-}
     distributivityP :: [a] -> [a] -> Proof
-    distributivityP xs ys = _
+    distributivityP xs ys = hole

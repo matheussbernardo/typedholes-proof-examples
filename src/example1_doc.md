@@ -21,22 +21,12 @@ listLengthProof = hole
 - **Hole Information:** 
   LH should display the type of the hole
   In this case: `hole :: xs:[a] -> {listLength xs == len xs}`
-- **Possible Feedback from LH:**
-  - Suggest a Case Split to continue the proof.
 
 ## 4. User Reaction & Next Step:
-The user replaces `hole` with the case split (this could also be automated):
+The user replaces `hole` with a case split in `xs` (this could also be automated):
 ```haskell
 {-@ listLengthProof :: xs:[a] -> {listLength xs == len xs} @-}
 listLengthProof :: [a] -> Proof
 listLengthProof []     = hole
 listLengthProof (x:xs) = hole
 ```
-
-## 5. Next LH Response:
-
-
-## 6. Completion Criteria:
-- The proof is complete when LH verifies that all steps hold.
-- No remaining typed holes (`_`) in the proof.
-- The final proof should match LiquidHaskell’s expectations without errors.

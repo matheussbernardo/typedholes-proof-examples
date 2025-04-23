@@ -5,6 +5,8 @@ module Example5 where
     import Prelude hiding ((<>), reverse, length, (++))
     import Language.Haskell.Liquid.ProofCombinators ((===), (***), (?), QED(QED), Proof)
 
+    hole = undefined
+
     data Tree = Leaf Int | Node Tree Tree
 
     {-@ reflect flatten @-}
@@ -29,5 +31,4 @@ module Example5 where
 
     {-@ flattenApp :: t:Tree -> ns:[Int] -> { v:[Int] | v == flatten t ++ ns } @-}
     flattenApp :: Tree -> [Int] -> [Int]
-    flattenApp t ns = _ -- Structural Induction
-
+    flattenApp t ns = hole -- Structural Induction

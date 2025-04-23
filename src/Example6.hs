@@ -5,6 +5,7 @@
 module Example6 where
     import Prelude hiding ((<>), reverse, length, (++))
     import Language.Haskell.Liquid.ProofCombinators ((===), (***), (?), QED(QED), Proof)
+    hole = undefined
     {-@ length :: [a] -> {v:Int | 0 <= v } @-}
     length :: [a] -> Int
     length [] = 0
@@ -46,4 +47,4 @@ module Example6 where
          :: e:Expr -> s:Stack -> {exec (comp e) s == Just ((eval  e):s) } 
     @-}
     generalizedCorrectness :: Expr -> Stack -> Proof
-    generalizedCorrectness e s = _ -- Structural Induction
+    generalizedCorrectness e s = hole -- Structural Induction

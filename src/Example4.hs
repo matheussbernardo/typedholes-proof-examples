@@ -5,6 +5,7 @@ module Example4 where
     import Prelude hiding ((<>), reverse, length, (++))
     import Language.Haskell.Liquid.ProofCombinators ((===), (***), (?), QED(QED), Proof)
 
+    hole = undefined
     {-@ length :: [a] -> {v:Int | 0 <= v } @-}
     length :: [a] -> Int
     length [] = 0
@@ -34,6 +35,6 @@ module Example4 where
     reverseApp (x:xs) ys 
         = reverse (x:xs) ++ ys
         === (reverse xs ++ [x]) ++ ys
-        === (reverse xs ++ [x] ++ ys) ? _ -- I need a lemma here! Can the hole help me?
+        === (reverse xs ++ [x] ++ ys) ? hole -- I need a lemma here! Can the hole help me?
         === reverse xs ++ ([x] ++ ys)
         -- It continues here following the
